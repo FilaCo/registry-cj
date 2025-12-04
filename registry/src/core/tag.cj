@@ -5,7 +5,7 @@ import std.reflect.TypeInfo
 
 @Derive[Equatable, Hashable]
 protected struct Tag {
-    private Tag(protected let typeName!: String, protected let label!: String = "default") {}
+    private Tag(protected let typeName!: String, protected let label!: String) {}
 
     static func of<T>(label!: String = "default"): Tag {
         Tag(typeName: TypeInfo.of<T>().qualifiedName, label: label)
@@ -14,6 +14,6 @@ protected struct Tag {
 
 extend Tag <: ToString {
     public func toString(): String {
-        typeName + label
+        "${typeName}.${label}"
     }
 }

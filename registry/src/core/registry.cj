@@ -1,7 +1,6 @@
 package registry.core
 
 import std.collection.ReadOnlyMap
-import std.reflect.TypeInfo
 
 public class Registry {
     private let _entries: ReadOnlyMap<Tag, Any>
@@ -24,18 +23,30 @@ public class Registry {
         get(tag)
     }
 
+    public func tryGet<T>(): ?T {
+        let tag = Tag.of<T>()
+        tryGet(tag)
+    }
+
+    public func tryGet<T>(label: String): ?T {
+        let tag = Tag.of<T>(label: label)
+        tryGet(tag)
+    }
+
     private func get<T>(tag: Tag): T {
-        (_entries[tag] as Entry<T>).getOrThrow {
-            => RegistryEntryHasWrongTypeException(tag, expected: TypeInfo.of<T>(), actual: TypeInfo.of(_entries[tag]))
-        }.get(this)
+        tryGet<T>(tag).getOrThrow {=> EntryNotFoundException(tag)}
+    }
+
+    private func tryGet<T>(tag: Tag): ?T {
+        _entries.get(tag).map {item => item as Entry<T>}.flatten().map {entry => entry.get(this)}
     }
 }
 
-private class RegistryEntryHasWrongTypeException <: Exception {
-    RegistryEntryHasWrongTypeException(tag: Tag, expected!: TypeInfo, actual!: TypeInfo) {
-        super("entry for tag `${tag}` has wrong type. Expected type: ${expected}, actual: ${actual}")
+private class EntryNotFoundException <: Exception {
+    EntryNotFoundException(tag: Tag) {
+        super("entry for tag `${tag}` not found")
     }
     protected func getClassName() {
-        "RegistryEntryHasWrongTypeException"
+        "EntryNotFoundException"
     }
 }
