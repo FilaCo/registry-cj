@@ -17,4 +17,26 @@ class RegistryTest {
         @AssertThrows[EntryNotFoundException](sut.get<String>("whatever"))
         @PowerAssert(None<Int64> == sut.tryGet<Int64>())
     }
+
+    @TestCase
+    func testBasic() {
+        // arrange
+        let sut: Registry = Registry.builder().add<TestItem, TestEntry>(TestEntry()).build()
+
+        // act
+        let res = sut.get<TestItem>()
+
+        // assert
+        @PowerAssert(res is TestItem)
+    }
+}
+
+interface TestItem {}
+
+class TestItemImpl <: TestItem {}
+
+class TestEntry <: Entry<TestItem> {
+    public func get(_: Registry): TestItem {
+        TestItemImpl()
+    }
 }
