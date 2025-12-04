@@ -38,12 +38,12 @@ public class Registry {
     }
 
     private func tryGet<T>(tag: Tag): ?T {
-        _entries.get(tag).map {item => item as Entry<T>}.flatten().map {entry => entry.get(this)}
+        _entries.get(tag).map {item => item as Entry<T>}.flatten()?.get(this)
     }
 }
 
-private class EntryNotFoundException <: Exception {
-    EntryNotFoundException(tag: Tag) {
+protected class EntryNotFoundException <: Exception {
+    protected EntryNotFoundException(tag: Tag) {
         super("entry for tag `${tag}` not found")
     }
     protected func getClassName() {
