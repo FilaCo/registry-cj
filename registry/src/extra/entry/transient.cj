@@ -1,6 +1,7 @@
-package registry.extra
+package registry.extra.entry
 
 import registry.core.{Builder, Entry, Registry}
+import registry.extra.FromRegistry
 
 public class Transient<T> {
     public Transient(protected let _factory: (Registry) -> T) {}
@@ -12,13 +13,13 @@ extend<T> Transient<T> <: Entry<T> {
     }
 }
 
-public interface AddTransient<T> {
-    func addTransient<InterfaceT>(): T where InterfaceT <: FromRegistry<InterfaceT>
-    func addTransient<InterfaceT>(label: String): T where InterfaceT <: FromRegistry<InterfaceT>
-    func addTransient<InterfaceT>(factory: (Registry) -> InterfaceT): T
-    func addTransient<InterfaceT>(label: String, factory: (Registry) -> InterfaceT): T
-    func addTransientImpl<InterfaceT, ImplementationT>(): T where ImplementationT <: FromRegistry<InterfaceT>
-    func addTransientImpl<InterfaceT, ImplementationT>(label: String): T where ImplementationT <: FromRegistry<InterfaceT>
+public interface AddTransient<BuilderT> {
+    func addTransient<InterfaceT>(): BuilderT where InterfaceT <: FromRegistry<InterfaceT>
+    func addTransient<InterfaceT>(label: String): BuilderT where InterfaceT <: FromRegistry<InterfaceT>
+    func addTransient<InterfaceT>(factory: (Registry) -> InterfaceT): BuilderT
+    func addTransient<InterfaceT>(label: String, factory: (Registry) -> InterfaceT): BuilderT
+    func addTransientImpl<InterfaceT, ImplementationT>(): BuilderT where ImplementationT <: FromRegistry<InterfaceT>
+    func addTransientImpl<InterfaceT, ImplementationT>(label: String): BuilderT where ImplementationT <: FromRegistry<InterfaceT>
 }
 
 extend Builder <: AddTransient<Builder> {

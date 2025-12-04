@@ -1,7 +1,8 @@
-package registry.extra
+package registry.extra.entry
 
 import std.sync.ReadWriteLock
 import registry.core.{Builder, Entry, Registry}
+import registry.extra.FromRegistry
 
 public class Lazy<T> {
     protected var _instance = None<T>
@@ -36,13 +37,13 @@ extend<T> Lazy<T> <: Entry<T> {
     }
 }
 
-public interface AddLazy<T> {
-    func addLazy<InterfaceT>(): T where InterfaceT <: FromRegistry<InterfaceT>
-    func addLazy<InterfaceT>(label: String): T where InterfaceT <: FromRegistry<InterfaceT>
-    func addLazy<InterfaceT>(factory: (Registry) -> InterfaceT): T
-    func addLazy<InterfaceT>(label: String, factory: (Registry) -> InterfaceT): T
-    func addLazyImpl<InterfaceT, ImplementationT>(): T where ImplementationT <: FromRegistry<InterfaceT>
-    func addLazyImpl<InterfaceT, ImplementationT>(label: String): T where ImplementationT <: FromRegistry<InterfaceT>
+public interface AddLazy<BuilderT> {
+    func addLazy<InterfaceT>(): BuilderT where InterfaceT <: FromRegistry<InterfaceT>
+    func addLazy<InterfaceT>(label: String): BuilderT where InterfaceT <: FromRegistry<InterfaceT>
+    func addLazy<InterfaceT>(factory: (Registry) -> InterfaceT): BuilderT
+    func addLazy<InterfaceT>(label: String, factory: (Registry) -> InterfaceT): BuilderT
+    func addLazyImpl<InterfaceT, ImplementationT>(): BuilderT where ImplementationT <: FromRegistry<InterfaceT>
+    func addLazyImpl<InterfaceT, ImplementationT>(label: String): BuilderT where ImplementationT <: FromRegistry<InterfaceT>
 }
 
 extend Builder <: AddLazy<Builder> {
