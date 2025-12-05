@@ -3,7 +3,7 @@ package registry.extra.entry
 import registry.core.{Builder, Entry, Registry}
 import registry.extra.FromRegistry
 
-public class Transient<T> {
+public struct Transient<T> {
     public Transient(protected let _factory: (Registry) -> T) {}
 }
 

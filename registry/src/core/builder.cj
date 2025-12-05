@@ -3,7 +3,7 @@ package registry.core
 import std.collection.HashMap
 
 public class Builder {
-    private var _entries = HashMap<Tag, Any>()
+    private var _entries = HashMap<Tag, Box<Any>>()
 
     public func build(): Registry {
         Registry(this)
@@ -22,7 +22,7 @@ public class Builder {
     }
 
     private func add<InterfaceT, EntryT>(tag: Tag, entry: EntryT): This where EntryT <: Entry<InterfaceT> {
-        _entries.add(tag, entry)
+        _entries.add(tag, Box(entry))
 
         this
     }

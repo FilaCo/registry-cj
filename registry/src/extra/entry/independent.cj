@@ -2,13 +2,17 @@ package registry.extra.entry
 
 import registry.core.{Builder, Entry, Registry}
 
-public class Independent<T> {
-    public Independent(protected let inner: T) {}
+public struct Independent<T> {
+    protected let inner: Box<T>
+
+    public Independent(v: T) {
+        inner = Box(v)
+    }
 }
 
 extend<T> Independent<T> <: Entry<T> {
     public func get(_: Registry): T {
-        inner
+        inner.value
     }
 }
 

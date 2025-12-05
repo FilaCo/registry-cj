@@ -35,7 +35,7 @@ interface TestItem {}
 
 class TestItemImpl <: TestItem {}
 
-class TestEntry <: Entry<TestItem> {
+struct TestEntry <: Entry<TestItem> {
     public func get(_: Registry): TestItem {
         TestItemImpl()
     }

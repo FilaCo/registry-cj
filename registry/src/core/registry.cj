@@ -3,7 +3,7 @@ package registry.core
 import std.collection.ReadOnlyMap
 
 public class Registry {
-    private let _entries: ReadOnlyMap<Tag, Any>
+    private let _entries: ReadOnlyMap<Tag, Box<Any>>
 
     public static func builder(): Builder {
         Builder()
@@ -38,7 +38,7 @@ public class Registry {
     }
 
     private func tryGet<T>(tag: Tag): ?T {
-        _entries.get(tag).map {item => item as Entry<T>}.flatten()?.get(this)
+        _entries.get(tag).map {item => item.value as Entry<T>}.flatten()?.get(this)
     }
 }
 
